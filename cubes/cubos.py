@@ -1,3 +1,4 @@
+# Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 from OpenGL import GL
 from array import array
 import ctypes

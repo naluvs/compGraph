@@ -1,3 +1,4 @@
+# Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 import array
 import math
 

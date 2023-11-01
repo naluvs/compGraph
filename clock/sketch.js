@@ -1,3 +1,4 @@
+// Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 let circle = 200;
 let points = 12;
 

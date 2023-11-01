@@ -1,7 +1,8 @@
-from OpenGL import GL
+# Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 from array import array
 import ctypes
 import glfw
+from OpenGL import GL
 
 VERTEX_SHADER = """
 #version 400

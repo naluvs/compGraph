@@ -1,3 +1,4 @@
+// Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 let pontos = [];
 let selecionado = null;
 

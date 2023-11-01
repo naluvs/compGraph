@@ -1,3 +1,4 @@
+// Ana Luiza Seabra, Ana Beatriz Bento e Vinicius Pessanha Drumond
 var angle = 0;
 var slider;
 
