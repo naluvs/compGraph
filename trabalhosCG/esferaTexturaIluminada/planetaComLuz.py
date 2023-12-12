@@ -89,8 +89,7 @@ def compilaShaders():
   GL.glDeleteProgram(progId)
   raise Exception(error)
 
-
-def fEsfera(u, v):
+def esfera(u, v):
   theta = (u * math.pi) - math.pi / 2
   phi = v * 2 * math.pi
   r = 2
@@ -98,29 +97,6 @@ def fEsfera(u, v):
   y = r * math.sin(theta)
   z = r * math.cos(theta) * math.sin(phi)
   return x, y, z
-
-
-def fTroncoCone(u, v):
-  theta = v * 2 * math.pi
-  r1 = 4
-  r2 = 2
-  h = 2
-  px = ((1 - u) * (r1 - r2)) + r2
-  x = px * math.cos(theta)
-  y = u * h
-  z = px * math.sin(theta)
-  return x, y, z
-
-
-f = fEsfera
-
-
-def fc(u, v):
-  r = u
-  g = v
-  b = 1 - u
-  return r, g, b
-
 
 def indiceMalha(M=4, N=4):
   indices = array('H')
@@ -133,32 +109,17 @@ def indiceMalha(M=4, N=4):
     indices.append((i + 1) * M + M - 1)
   return indices
 
-
 def posicao(M=4, N=4):
   posicao = array('f')
   for i in range(N):
     v = i / (N - 1)
     for j in range(M):
       u = j / (M - 1)
-      x, y, z = f(u, v)
+      x, y, z = esfera(u, v)
       posicao.append(x)
       posicao.append(y)
       posicao.append(z)
   return posicao
-
-
-def cor(M=4, N=4):
-  cor = array('f')
-  for i in range(N):
-    v = i / (N - 1)
-    for j in range(M):
-      u = j / (M - 1)
-      x, y, z = fc(u, v)
-      cor.append(x)
-      cor.append(y)
-      cor.append(z)
-  return cor
-
 
 def textura(M=4, N=4):
   textura = array('f')
@@ -176,14 +137,11 @@ def normal(M=4,N=4):
         v = i/(N-1)
         for j in range(M):
             u = j/(M-1)
-            x, y, z = f(u,v)
+            x, y, z = esfera(u,v)
             normal.append(x)
             normal.append(y)
             normal.append(z)
     return normal
-
-tamIndice = 0
-
 
 def malha():
   global tamIndice
@@ -220,7 +178,6 @@ def malha():
   GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, GL.GL_FALSE, 0,
                            ctypes.c_void_p(0))
 
-
   VBO_Normal = GL.glGenBuffers(1)
   GL.glBindBuffer(GL.GL_ARRAY_BUFFER, VBO_Normal)
   GL.glBufferData(GL.GL_ARRAY_BUFFER,
@@ -230,7 +187,6 @@ def malha():
   GL.glVertexAttribPointer(2, 3, GL.GL_FLOAT, GL.GL_FALSE, 0,
                            ctypes.c_void_p(0))
 
-
   VBO_indice = GL.glGenBuffers(1)
   GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, VBO_indice)
   GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER,
@@ -239,7 +195,6 @@ def malha():
                   GL.GL_STATIC_DRAW)
 
   return VAO
-
 
 def loadTexture(filename):
   im = Image.open(filename)
@@ -260,7 +215,6 @@ def loadTexture(filename):
   GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
   return textureId
 
-
 def inicializa():
   global progId, malhaVAO
   GL.glEnable(GL.GL_DEPTH_TEST)
@@ -269,12 +223,10 @@ def inicializa():
   malhaVAO = malha()
   GL.glUseProgram(progId)
   GL.glActiveTexture(GL.GL_TEXTURE0)
-  loadTexture("./merda.jpg")
+  loadTexture("trabalhosCG/esferaTexturaIluminada/textures/mapa.jpeg")
   GL.glUniform1i(GL.glGetUniformLocation(progId, "textureSlot"), 0)
 
-
 a = 0
-
 
 def desenha():
   global a
@@ -284,8 +236,7 @@ def desenha():
   projection = glm.perspective(math.pi / 4, 800 / 600, 0.1, 100)
   camera = glm.lookAt(glm.vec3(0, 0, 12), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
 
-  model = glm.rotate(a, glm.vec3(0, 1, 0))
-  mvp = projection * camera * model
+  model = glm.rotate(a, glm.vec3(0, 1, 0))*glm.rotate(a, glm.vec3(1, 0, 0))
 
   GL.glBindVertexArray(malhaVAO)
   GL.glUseProgram(progId)
@@ -298,8 +249,7 @@ def desenha():
   GL.glDrawElements(GL.GL_TRIANGLE_STRIP, tamIndice, GL.GL_UNSIGNED_SHORT,
                     ctypes.c_void_p(0))
 
-  a += 0.005
-
+  a += 0.0005
 
 def main():
   if not glfw.init():
@@ -322,7 +272,5 @@ def main():
 
   glfw.terminate()
 
-
 if __name__ == "__main__":
   main()
-
