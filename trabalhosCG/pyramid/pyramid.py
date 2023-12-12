@@ -62,28 +62,28 @@ def compilaShaders():
     raise Exception(error)
 
 
-def cubo():
+def pyramid():
 
-    posicao = array('f', [
-        -1.0, -1.0,  1.0,  # A 0
-        1.0, -1.0,  1.0,  # B 1
-        1.0, -1.0, -1.0,  # C 2
-        -1.0, -1.0, -1.0,  # D 3
-        0, 1, 0  # E (topo da pirâmide) 4
-    ])
+    A = (-1.0, -1.0,  1.0)
+    B = (1.0, -1.0,  1.0)
+    C = (1.0, -1.0, -1.0)
+    D = (-1.0, -1.0, -1.0)
+    E = (0.0, 1.0, 0.0)
 
-    cor = array('f', [
-        1.0, 0.0, 0.0,  # A
-        1.0, 1.0, 0.0,  # B
-        0.0, 1.0, 0.0,  # C
-        0.0, 1.0, 1.0,  # D
-        0.0, 0.0, 1.0,  # E
-    ])
+    posicao = array('f', [*A,*B,*C,*D,*E])
+
+    corA = (216/255,191/255,216/255)
+    corB = (255/255,228/255,196/255)
+    corC = (255/255,240/255,245/255)
+    corD = (175/255,238/255,238/255)
+    corE = (255/255,218/255,185/255)
+
+    cor = array('f', [*corA,*corB,*corC,*corD,*corE])
 
     indices = array('H', [
         0, 4, 1, 1, 4, 2,
         2, 4, 3, 3, 4, 0,
-        0, 3, 2, 0, 2, 1  # Base
+        0, 3, 2, 0, 2, 1
     ])
 
     VAO = GL.glGenVertexArrays(1)
@@ -114,11 +114,11 @@ def cubo():
 
 
 def inicializa():
-    global progId, cuboVAO
+    global progId, pyramidVAO
     GL.glEnable(GL.GL_DEPTH_TEST)
     GL.glEnable(GL.GL_MULTISAMPLE)
     progId = compilaShaders()
-    cuboVAO = cubo()
+    pyramidVAO = pyramid()
 
 
 a = 0
@@ -135,14 +135,14 @@ def desenha():
     model = glm.rotate(a, glm.vec3(0, 1, 0))
     mvp = projection * camera * model
 
-    GL.glBindVertexArray(cuboVAO)
+    GL.glBindVertexArray(pyramidVAO)
     GL.glUseProgram(progId)
     GL.glUniformMatrix4fv(GL.glGetUniformLocation(
         progId, "mvp"), 1, GL.GL_FALSE, glm.value_ptr(mvp))
     GL.glDrawElements(GL.GL_TRIANGLES, 36,
                       GL.GL_UNSIGNED_SHORT, ctypes.c_void_p(0))
 
-    a += 0.0002
+    a += 0.0005
 
 
 def main():
@@ -153,7 +153,7 @@ def main():
     glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
     glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, GL.GL_TRUE)
     glfw.window_hint(glfw.SAMPLES, 4)
-    window = glfw.create_window(800, 600, "Cubo", None, None)
+    window = glfw.create_window(800, 600, "Piramide", None, None)
     if not window:
         glfw.terminate()
         return

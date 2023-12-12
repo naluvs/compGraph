@@ -142,7 +142,7 @@ def inicializa():
     cuboVAO = cubo()
     GL.glUseProgram(progId)
     GL.glActiveTexture(GL.GL_TEXTURE0)
-    loadTexture("./textures/dado.png")
+    loadTexture("trabalhosCG/textureCube/textures/dado.png")
     GL.glUniform1i(GL.glGetUniformLocation(progId, "textureSlot"),0)
 
 
@@ -162,7 +162,7 @@ def desenha():
     GL.glUniformMatrix4fv(GL.glGetUniformLocation(progId, "mvp"),1,GL.GL_FALSE,glm.value_ptr(mvp))
     GL.glDrawArrays(GL.GL_TRIANGLES,0,36)
 
-    a += 0.005
+    a += 0.0005
 
 
 def main():
